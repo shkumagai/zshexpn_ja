@@ -20,6 +20,7 @@ This is performed only in interactive shells.
 
 Alias Expansion
 ---------------
+
 Aliases are expanded immediately  before  the  command  line  is
 parsed as explained under Aliasing in zshmisc(1).
 
@@ -28,7 +29,7 @@ Process Substitution, Parameter Expansion, Command Substitution, Arithmetic Expa
 
 These  five  are performed in one step in left-to-right fashion.
 After these expansions, all unquoted occurrences of the  charac-
-ters `\', `'' and `"' are removed.
+ters ``\``, ``'`` and ``"`` are removed.
 
 Filename Expansion
 ------------------
@@ -64,13 +65,13 @@ Overview
 --------
 
 A history expansion begins with the first character  of  the  histchars
-parameter,  which is `!' by default, and may occur anywhere on the com-
-mand line; history expansions do not nest.  The `!' can be escaped with
-`\' or can be enclosed between a pair of single quotes ('') to suppress
+parameter,  which is ``!`` by default, and may occur anywhere on the com-
+mand line; history expansions do not nest.  The ``!`` can be escaped with
+``\`` or can be enclosed between a pair of single quotes ('') to suppress
 its special meaning.  Double quotes will not work for this.   Following
 this history character is an optional event designator (see the section
-`Event Designators') and then an optional word designator (the  section
-`Word  Designators');  if  neither  of these designators is present, no
+``Event Designators``) and then an optional word designator (the  section
+``Word  Designators``);  if  neither  of these designators is present, no
 history expansion occurs.
 
 Input lines  containing  history  expansions  are  echoed  after  being
@@ -85,27 +86,27 @@ ous command.  However, if the option CSH_JUNKIE_HISTORY  is  set,  then
 every  history  reference  with no event specification always refers to
 the previous command.
 
-For example, `!' is the event designator for the previous  command,  so
-`!!:1'  always  refers  to  the first word of the previous command, and
-`!!$' always refers to the last word of  the  previous  command.   With
-CSH_JUNKIE_HISTORY set, then `!:1' and `!$' function in the same manner
-as `!!:1' and `!!$', respectively.  Conversely,  if  CSH_JUNKIE_HISTORY
-is  unset,  then  `!:1'  and  `!$'  refer  to the first and last words,
+For example, ``!`` is the event designator for the previous  command,  so
+``!!:1``  always  refers  to  the first word of the previous command, and
+``!!$`` always refers to the last word of  the  previous  command.   With
+CSH_JUNKIE_HISTORY set, then ``!:1`` and ``!$`` function in the same manner
+as ``!!:1`` and ``!!$``, respectively.  Conversely,  if  CSH_JUNKIE_HISTORY
+is  unset,  then  ``!:1``  and  ``!$``  refer  to the first and last words,
 respectively, of the same event referenced by the nearest other history
 reference  preceding them on the current command line, or to the previ-
 ous command if there is no preceding reference.
 
-The character sequence `^foo^bar' (where `^'  is  actually  the  second
+The character sequence ``^foo^bar`` (where ``^``  is  actually  the  second
 character of the histchars parameter) repeats the last command, replac-
-ing the string foo with bar.  More precisely, the sequence  `^foo^bar^'
-is synonymous with `!!:s^foo^bar^', hence other modifiers (see the sec-
-tion  `Modifiers')  may  follow  the   final   `^'.    In   particular,
-`^foo^bar^:G' performs a global substitution.
+ing the string foo with bar.  More precisely, the sequence ``^foo^bar^``
+is synonymous with ``!!:s^foo^bar^``, hence other modifiers (see the sec-
+tion  ``Modifiers``)  may  follow  the   final  ``^``.    In   particular,
+``^foo^bar^:G`` performs a global substitution.
 
-If  the  shell encounters the character sequence `!"' in the input, the
+If  the  shell encounters the character sequence ``!"`` in the input, the
 history mechanism is temporarily disabled until the current  list  (see
-zshmisc(1))  is  fully parsed.  The `!"' is removed from the input, and
-any subsequent `!' characters have no special significance.
+zshmisc(1))  is  fully parsed.  The ``!"`` is removed from the input, and
+any subsequent ``!`` characters have no special significance.
 
 A less convenient but more comprehensible form of command history  sup-
 port is provided by the fc builtin.
@@ -115,41 +116,41 @@ Event Designators
 -----------------
 
 An  event designator is a reference to a command-line entry in the his-
-tory list.  In the list below, remember that the initial  `!'  in  each
+tory list.  In the list below, remember that the initial  ``!``  in  each
 item  may  be  changed  to  another  character by setting the histchars
 parameter.
 
-:!:
+**!**
        Start a history expansion, except when followed by a blank, new-
-       line,  `=' or `('.  If followed immediately by a word designator
-       (see the section `Word Designators'), this forms a history  ref-
-       erence with no event designator (see the section `Overview').
+       line,  ``=`` or ``(``.  If followed immediately by a word designator
+       (see the section ``Word Designators``), this forms a history  ref-
+       erence with no event designator (see the section ``Overview``).
 
-:!!:
+**!!**
        Refer  to  the  previous  command.   By  itself,  this expansion
        repeats the previous command.
 
-:!n:
+**!n**
        Refer to command-line n.
 
-:!-n:
+**!-n**
        Refer to the current command-line minus n.
 
-:!str:
+**!str**
        Refer to the most recent command starting with str.
 
-:!?str[?]:
+**!?str[?]**
        Refer to the most recent command containing str.   The  trailing
-       `?'  is necessary if this reference is to be followed by a modi-
+       ``?`` is necessary if this reference is to be followed by a modi-
        fier or followed by any text that is not to be  considered  part
        of str.
 
-:!#:
+**!#**
        Refer  to the current command line typed in so far.  The line is
        treated as if it were complete up  to  and  including  the  word
-       before the one with the `!#' reference.
+       before the one with the ``!#`` reference.
 
-:!{...}:
+**!{...}**
        Insulate a history reference from adjacent characters (if neces-
        sary).
 
@@ -157,115 +158,118 @@ Word Designators
 ----------------
 
 A word designator indicates which word or words of a given command line
-are to be included in a history reference.  A `:' usually separates the
+are to be included in a history reference.  A ``:`` usually separates the
 event specification from the word designator.  It may be  omitted  only
-if  the  word designator begins with a `^', `$', `*', `-' or `%'.  Word
+if  the  word designator begins with a ``^``, ``$``, ``*``, ``-`` or ``%``.  Word
 designators include:
 
-:0:      The first input word (command).
-:n:      The nth argument.
-:^:      The first argument.  That is, 1.
-:$:      The last argument.
-:%:      The word matched by (the most recent) ?str search.
-:x-y:    A range of words; x defaults to 0.
-:*:      All the arguments, or a null value if there are none.
-:x*:     Abbreviates `x-$'.
-:x-:     Like `x*' but omitting word $.
+====== ================================================================
+0      The first input word (command).
+n      The nth argument.
+^      The first argument.  That is, 1.
+$      The last argument.
+%      The word matched by (the most recent) ?str search.
+x-y    A range of words; x defaults to 0.
+\*     All the arguments, or a null value if there are none.
+x\*    Abbreviates ``x-$``.
+x-     Like ``x*`` but omitting word $.
+====== ================================================================
 
-Note that a `%' word designator works only when used in  one  of  `!%',
-`!:%'  or `!?str?:%', and only when used after a !? expansion (possibly
+Note that a `%' word designator works only when used in  one  of ``!%``,
+``!:%`` or ``!?str?:%``, and only when used after a !? expansion (possibly
 in an earlier command).  Anything else results in  an  error,  although
 the error may not be the most obvious one.
 
 Modifiers
 ---------
 After  the  optional  word designator, you can add a sequence of one or
-more of the following modifiers, each preceded by a `:'.   These  modi-
+more of the following modifiers, each preceded by a ``:``. These  modi-
 fiers  also  work  on  the  result of filename generation and parameter
 expansion, except where noted.
 
-:a:    Turn a file name into an absolute path:   prepends  the  current
-       directory, if necessary, and resolves any use of `..' and `.' in
-       the path.  Note that the transformation takes place even if  the
-       file or any intervening directories do not exist.
+========= ======================================================================
+a         Turn a file name into an absolute path:   prepends  the  current
+          directory, if necessary, and resolves any use of ``..`` and ``.`` in
+          the path.  Note that the transformation takes place even if  the
+          file or any intervening directories do not exist.
 
-:A:    As  `a',  but also resolve use of symbolic links where possible.
-       Note that resolution of `..' occurs before  resolution  of  sym-
-       bolic  links.   This  call is equivalent to a unless your system
-       has the realpath system call (modern systems do).
+A         As ``a``, but also resolve use of symbolic links where possible.
+          Note that resolution of ``..`` occurs before  resolution  of  sym-
+          bolic  links.   This  call is equivalent to a unless your system
+          has the realpath system call (modern systems do).
 
-:c:    Resolve a command name into an absolute path  by  searching  the
-       command path given by the PATH variable.  This does not work for
-       commands containing directory parts.  Note also that  this  does
-       not  usually  work as a glob qualifier unless a file of the same
-       name is found in the current directory.
+c         Resolve a command name into an absolute path  by  searching  the
+          command path given by the PATH variable.  This does not work for
+          commands containing directory parts.  Note also that  this  does
+          not  usually  work as a glob qualifier unless a file of the same
+          name is found in the current directory.
 
-:e:    Remove all but the part of the filename extension following  the
-       `.';  see  the  definition  of  the  filename  extension  in the
-       description of the r modifier below.   Note  that  according  to
-       that definition the result will be empty if the string ends with
-       a `.'.
+e         Remove all but the part of the filename extension following  the
+          ``.``;  see  the  definition  of  the  filename  extension  in the
+          description of the r modifier below.   Note  that  according  to
+          that definition the result will be empty if the string ends with
+          a ``.``.
 
-:h:    Remove a trailing pathname component, leaving  the  head.   This
-       works like `dirname'.
+h         Remove a trailing pathname component, leaving  the  head.   This
+          works like ``dirname``.
 
-:l:    Convert the words to all lowercase.
+l         Convert the words to all lowercase.
 
-:p:    Print  the  new  command but do not execute it.  Only works with
-       history expansion.
+p         Print  the  new  command but do not execute it.  Only works with
+          history expansion.
 
-:q:    Quote the substituted  words,  escaping  further  substitutions.
-       Works with history expansion and parameter expansion, though for
-       parameters it is only useful if the  resulting  text  is  to  be
-       re-evaluated such as by eval.
+q         Quote the substituted  words,  escaping  further  substitutions.
+          Works with history expansion and parameter expansion, though for
+          parameters it is only useful if the  resulting  text  is  to  be
+          re-evaluated such as by eval.
 
-:Q:    Remove one level of quotes from the substituted words.
+Q         Remove one level of quotes from the substituted words.
 
-:r:    Remove a filename extension leaving the root name.  Strings with
-       no filename extension are not altered.  A filename extension  is
-       a `.' followed by any number of characters (including zero) that
-       are neither `.' nor `/' and that continue  to  the  end  of  the
-       string.  For example, the extension of `foo.orig.c' is `.c', and
-       `dir.c/foo' has no extension.
+r         Remove a filename extension leaving the root name.  Strings with
+          no filename extension are not altered.  A filename extension  is
+          a ``.`` followed by any number of characters (including zero) that
+          are neither ``.`` nor ``/`` and that continue  to  the  end  of  the
+          string.  For example, the extension of ``foo.orig.c`` is ``.c``, and
+          ``dir.c/foo`` has no extension.
 
-:s/l/r[/]:
-       Substitute r for l as described below.  The substitution is done
-       only  for  the  first string that matches l.  For arrays and for
-       filename generation, this applies to each word of  the  expanded
-       text.  See below for further notes on substitutions.
+s/l/r[/]  Substitute r for l as described below.  The substitution is done
+          only  for  the  first string that matches l.  For arrays and for
+          filename generation, this applies to each word of  the  expanded
+          text.  See below for further notes on substitutions.
 
-       The  forms  `gs/l/r' and `s/l/r/:G' perform global substitution,
-       i.e. substitute every occurrence of r for l.  Note that the g or
-       :G must appear in exactly the position shown.
+          The  forms ``gs/l/r`` and ``s/l/r/:G`` perform global substitution,
+          i.e. substitute every occurrence of r for l.  Note that the g or
+          :G must appear in exactly the position shown.
 
-       See further notes on this form of substitution below.
+          See further notes on this form of substitution below.
 
-:&:    Repeat  the  previous  s  substitution.  Like s, may be preceded
-       immediately by a g.  In parameter expansion the  &  must  appear
-       inside braces, and in filename generation it must be quoted with
-       a backslash.
+&         Repeat  the  previous  s  substitution.  Like s, may be preceded
+          immediately by a g.  In parameter expansion the  &  must  appear
+          inside braces, and in filename generation it must be quoted with
+          a backslash.
 
-:t:    Remove all leading pathname components, leaving the tail.   This
-       works like `basename'.
+t         Remove all leading pathname components, leaving the tail.   This
+          works like ``basename``.
 
-:u:    Convert the words to all uppercase.
+u         Convert the words to all uppercase.
 
-:x:    Like  q, but break into words at whitespace.  Does not work with
-       parameter expansion.
+x         Like  q, but break into words at whitespace.  Does not work with
+          parameter expansion.
+========= ======================================================================
 
 The s/l/r/ substitution works as follows.   By  default  the  left-hand
 side  of  substitutions  are  not patterns, but character strings.  Any
-character can be used as the delimiter in place of  `/'.   A  backslash
-quotes   the   delimiter   character.    The   character  `&',  in  the
+character can be used as the delimiter in place of ``/``.   A  backslash
+quotes   the   delimiter   character.    The   character ``&``,  in  the
 right-hand-side r, is replaced by the text from the  left-hand-side  l.
-The  `&'  can  be  quoted with a backslash.  A null l uses the previous
+The ``&`` can  be  quoted with a backslash.  A null l uses the previous
 string either from the previous l or from the contextual scan string  s
-from  `!?s'.  You can omit the rightmost delimiter if a newline immedi-
-ately follows r; the rightmost `?' in a context scan can  similarly  be
+from ``!?s``.  You can omit the rightmost delimiter if a newline immedi-
+ately follows r; the rightmost ``?`` in a context scan can  similarly  be
 omitted.  Note the same record of the last l and r is maintained across
 all forms of expansion.
 
-Note that if a `&' is used within glob qualifers an extra backslash  is
+Note that if a ``&`` is used within glob qualifers an extra backslash  is
 needed as a & is a special character in this case.
 
 If  the  option HIST_SUBST_PATTERN is set, l is treated as a pattern of
@@ -291,7 +295,7 @@ EXTENDED_GLOB option::
 
        print *.c(#q:s/#%(#b)s(*).c/'S${match[1]}.C'/)
 
-takes the expansion of *.c and  applies  the  glob  qualifiers  in  the
+takes the expansion of \*.c and  applies  the  glob  qualifiers  in  the
 (#q...)  expression, which consists of a substitution modifier anchored
 to the start and end of each word (#%).  This turns  on  backreferences
 ((#b)),  so  that  the  parenthesised subexpression is available in the
@@ -303,22 +307,22 @@ The following f, F, w and W modifiers work only with  parameter  expan-
 sion and filename generation.  They are listed here to provide a single
 point of reference for all modifiers.
 
-:f:    Repeats the immediately (without  a  colon)  following  modifier
-       until the resulting word doesn't change any more.
+======== =======================================================================
+f        Repeats the immediately (without  a  colon)  following  modifier
+         until the resulting word doesn't change any more.
 
-:F\:expr\::
-       Like  f,  but repeats only n times if the expression expr evalu-
-       ates to n.  Any character can be used instead  of  the  `:';  if
-       `(',  `[',  or `{' is used as the opening delimiter, the closing
-       delimiter should be ')', `]', or `}', respectively.
+F:expr:  Like  f,  but repeats only n times if the expression expr evalu-
+         ates to n.  Any character can be used instead  of  the ``:``;  if
+         ``(``,  ``[``,  or ``{`` is used as the opening delimiter, the closing
+         delimiter should be ``)``, ``]``, or ``}``, respectively.
 
-:w:    Makes the immediately following modifier work on  each  word  in
-       the string.
+w        Makes the immediately following modifier work on  each  word  in
+         the string.
 
-:W\:sep\::
-       Like  w  but  words are considered to be the parts of the string
-       that are separated by sep. Any character can be used instead  of
-       the `:'; opening parentheses are handled specially, see above.
+W:sep:   Like  w  but  words are considered to be the parts of the string
+         that are separated by sep. Any character can be used instead  of
+         the ``:``; opening parentheses are handled specially, see above.
+======== =======================================================================
 
 PROCESS SUBSTITUTION
 ====================
@@ -717,7 +721,7 @@ Dynamic named directories
 Static named directories
 ------------------------
 
-`=' expansion
+'=' expansion
 -------------
 
 Notes
