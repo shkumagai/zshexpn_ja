@@ -2,115 +2,105 @@
  ZSHEXPN (1)
 =============
 
-NAME
+名称
 ====
 
-zshexpn - zsh expansion and substitution
+zshexpn - zsh 展開と置換
 
-DESCRIPTION
-===========
+概要
+====
 
-The  following types of expansions are performed in the indicated order
-in five steps:
+各展開は、次の５つのステップで示された順序で実行されます:
 
-History Expansion
------------------
+ヒストリ展開
+------------
 
-This is performed only in interactive shells.
+これはインタラクティブシェルでのみ実行されます。
 
-Alias Expansion
----------------
+エイリアス展開
+--------------
 
-Aliases are expanded immediately  before  the  command  line  is
-parsed as explained under Aliasing in zshmisc(1).
+エイリアスは、 ``zshmisc (1)`` のエイリアスの節で説明したとおり、
+コマンドラインを解釈する前に、すぐに展開されます。
 
-Process Substitution, Parameter Expansion, Command Substitution, Arithmetic Expansion, Brace Expansion
-------------------------------------------------------------------------------------------------------
+プロセス置換、パラメータ展開、コマンド置換、数値展開、ブレース展開
+------------------------------------------------------------------
 
-These  five  are performed in one step in left-to-right fashion.
-After these expansions, all unquoted occurrences of the  charac-
-ters ``\``, ``'`` and ``"`` are removed.
+これらの５つは、左から右の順に則って、１つのステップで実行されます。
+これらの展開の後、引用符で括られていない ``\``, ``'`` および ``"`` の文字は
+すべて削除されます。
 
-Filename Expansion
-------------------
+ファイル名展開
+--------------
 
-If  the  SH_FILE_EXPANSION option is set, the order of expansion
-is modified for compatibility with sh and  ksh.   In  that  case
-filename  expansion  is performed immediately after alias expan-
-sion, preceding the set of five expansions mentioned above.
+``SH_FILE_EXPANSION`` オプションが設定されている場合、展開の順序は sh や ksh と
+互換になります。その場合、ファイル名展開はエイリアス展開の直後、上で説明した
+５つの展開の前に実行されます。
 
-Filename Generation
--------------------
+ファイル名生成
+--------------
 
-This expansion, commonly referred to as globbing, is always done
-last.
+一般的にはグロビングとして知られるこの展開は、常に最後に行われます。
 
-The following sections explain the types of expansion in detail.
 
-HISTORY EXPANSION
-=================
+以下のセクションでは、各展開の詳細について説明します。
 
-History  expansion  allows you to use words from previous command lines
-in the command line you are typing.  This simplifies  spelling  correc-
-tions and the repetition of complicated commands or arguments.  Immedi-
-ately before execution, each command is saved in the history list,  the
-size  of  which  is controlled by the HISTSIZE parameter.  The one most
-recent command is always retained in any case.  Each saved  command  in
-the  history  list  is called a history event and is assigned a number,
-beginning with 1 (one) when the shell starts up.   The  history  number
-that  you  may see in your prompt (see EXPANSION OF PROMPT SEQUENCES in
-zshmisc(1)) is the number that is to be assigned to the next command.
+ヒストリ展開
+============
 
-Overview
---------
+ヒストリ展開では、コマンドラインで以前にタイプしたコマンドの中から単語を
+使うことができます。これは綴り間違いの修正や複雑なコマンドや引数の繰り返しを
+容易にします。実行の直前、それぞれのコマンドはヒストリの一覧に保存され、
+リストのサイズは ``HISTSIZE`` パラメータで制御できます。最も直近のコマンド
+はどのような場合でも常に保持されます。ヒストリ一覧に保存されたコマンドは、
+それぞれヒストリイベントと呼ばれ、シェルが起動した時に 1 から始まる番号を
+振られます。プロンプトで目にするかもしれないヒストリ番号 (``zshmisc (1)`` の
+``EXAPNSION OF PROMPT SEQUENCE`` を参照) は、次のコマンドに割り当てられる
+番号です。
 
-A history expansion begins with the first character  of  the  histchars
-parameter,  which is ``!`` by default, and may occur anywhere on the com-
-mand line; history expansions do not nest.  The ``!`` can be escaped with
-``\`` or can be enclosed between a pair of single quotes ('') to suppress
-its special meaning.  Double quotes will not work for this.   Following
-this history character is an optional event designator (see the section
-``Event Designators``) and then an optional word designator (the  section
-``Word  Designators``);  if  neither  of these designators is present, no
-history expansion occurs.
+概要
+----
 
-Input lines  containing  history  expansions  are  echoed  after  being
-expanded,  but  before  any  other expansions take place and before the
-command is executed.  It is this expanded form that is recorded as  the
-history event for later references.
+ヒストリ展開は histchars パラメータの最初の文字 (デフォルトは ``!``) で始め、
+コマンドライン上のどこにでも書けますが、入れ子にすることはできません。
+``!`` は特別な意味を抑制するためには ``\`` でエスケープするか、または
+シングルクオート ('') のペアで括ることができます。ダブルクオートは使えません。
+ヒストリ文字に続くのはオプションのイベント指示子 (イベント指示子の節を参照)
+とオプションのワード支持子 (ワード支持子の節を参照) です; これらのどちらも
+存在しない場合、ヒストリ展開は実行されません。
 
-By  default, a history reference with no event designator refers to the
-same event as any preceding history reference on that command line;  if
-it  is the only history reference in a command, it refers to the previ-
-ous command.  However, if the option CSH_JUNKIE_HISTORY  is  set,  then
-every  history  reference  with no event specification always refers to
-the previous command.
+ヒストリ展開を含む入力行は、展開後にエコーされますが、その他の展開やコマンドが
+実行される前にエコーされています。後で参照されるためのヒストリイベントとして
+記録されるのは、この展開された形式です。
 
-For example, ``!`` is the event designator for the previous  command,  so
-``!!:1``  always  refers  to  the first word of the previous command, and
-``!!$`` always refers to the last word of  the  previous  command.   With
-CSH_JUNKIE_HISTORY set, then ``!:1`` and ``!$`` function in the same manner
-as ``!!:1`` and ``!!$``, respectively.  Conversely,  if  CSH_JUNKIE_HISTORY
-is  unset,  then  ``!:1``  and  ``!$``  refer  to the first and last words,
-respectively, of the same event referenced by the nearest other history
-reference  preceding them on the current command line, or to the previ-
-ous command if there is no preceding reference.
+デフォルトでは、イベント指示子のないヒストリ参照は、そのコマンドラインの
+以前の任意のヒストリ参照と同じイベントを指します; それがコマンドの唯一の
+ヒストリ参照である場合は、先行するコマンドを指します。しかし
+``CSH_JUNKIE_HISTORY`` が設定されている場合、すべてのイベント指示子のない
+ヒストリ参照は、常に先行するコマンドを参照します。
 
-The character sequence ``^foo^bar`` (where ``^``  is  actually  the  second
-character of the histchars parameter) repeats the last command, replac-
-ing the string foo with bar.  More precisely, the sequence ``^foo^bar^``
-is synonymous with ``!!:s^foo^bar^``, hence other modifiers (see the sec-
-tion  ``Modifiers``)  may  follow  the   final  ``^``.    In   particular,
-``^foo^bar^:G`` performs a global substitution.
+例えば、 ``!`` は以前のコマンドのイベント指示子なので、 ``!!:1`` は常に直前の
+コマンドの最初のワードを指し、 ``!!$`` は常に直前のコマンドの最後のワードを
+指します。 ``CSH_JUNKIE_HISTORY`` をセットすると、 ``!!:1`` と ``!$`` は
+それぞれ ``!!:1`` と ``!!$`` と同様に機能します。逆に ``CSH_JUNKIE_HISTORY``
+が設定されていない場合の ``!:1`` と ``!$`` は、それぞれ現在のコマンドラインで
+先行する最も近い他のヒストリ参照によって参照されているイベント、もしくは
+先行する参照が存在しない場合は先行するコマンドの、最初と最後のワードを指します。
 
-If  the  shell encounters the character sequence ``!"`` in the input, the
-history mechanism is temporarily disabled until the current  list  (see
-zshmisc(1))  is  fully parsed.  The ``!"`` is removed from the input, and
-any subsequent ``!`` characters have no special significance.
+``^boo^bar`` という文字シーケンス (``^`` は実際は histchars の２番めのパラメータ
+です) は、最後に実行したコマンドの ``foo`` を ``bar`` に置き換えて繰り返します。
+より正確には、 ``^foo^bar^`` というシーケンスは ``!!:s^foo^bar^`` と同義であり、
+すなわち ``^`` の後ろに他の修飾子 (セクション 修飾子 を参照してください) を
+続けることができます。具体的な例として、例えば ``^foo^bar^:G`` はグローバルな
+置換を行います。
 
-A less convenient but more comprehensible form of command history  sup-
-port is provided by the fc builtin.
+シェルが入力の中に ``!"`` の文字シーケンスを検出した場合、ヒストリの機構は
+現在のリスト (``zshmisc (1)`` を参照) が完全にパースされるまで、一時的に無効に
+なります。 ``!"`` が入力から取り除かれ、後続の ``!`` は特別な意味を持たなく
+なります。
 
+少し利便性は下がりますが、より分かりやすい形式のコマンドヒストリサポートが
+組み込みの fc で提供されています。
 
 Event Designators
 -----------------
