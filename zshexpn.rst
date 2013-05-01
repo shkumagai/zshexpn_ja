@@ -102,73 +102,68 @@ zshexpn - zsh 展開と置換
 少し利便性は下がりますが、より分かりやすい形式のコマンドヒストリサポートが
 組み込みの fc で提供されています。
 
-Event Designators
------------------
+イベント指示子
+--------------
 
-An  event designator is a reference to a command-line entry in the his-
-tory list.  In the list below, remember that the initial  ``!``  in  each
-item  may  be  changed  to  another  character by setting the histchars
-parameter.
+イベント指示子はヒストリ一覧の中のコマンドエントリを参照します。以下のリストで
+各アイテムの最初の ``!`` は、 histchars パラメータを設定することで、他の文字に
+変更できることを覚えておいてください。
 
-**!**
-       Start a history expansion, except when followed by a blank, new-
-       line,  ``=`` or ``(``.  If followed immediately by a word designator
-       (see the section ``Word Designators``), this forms a history  ref-
-       erence with no event designator (see the section ``Overview``).
+========= =====================================================================
+!         空白、改行、 ``=`` または ``(`` が後ろに続く場合を除き、ヒストリ展開
+          の開始を意味します。もしワード指示子 (``ワード指示子`` の節を参照)
+          が直後に続く場合、この形式はイベント指示子のないヒストリ参照です
+          (``概要`` の節を参照) 。
 
-**!!**
-       Refer  to  the  previous  command.   By  itself,  this expansion
-       repeats the previous command.
+!!        直前のコマンドを参照します。この展開は、単独で直前のコマンドを繰り返し
+          ます。
 
-**!n**
-       Refer to command-line n.
+!n        コマンドラインの n 番目 を参照します。
 
-**!-n**
-       Refer to the current command-line minus n.
+!-n       現在のコマンドラインから n 番前を参照します。
 
-**!str**
-       Refer to the most recent command starting with str.
+!str      最も直近の *str* から始まるコマンドを参照します。
 
-**!?str[?]**
-       Refer to the most recent command containing str.   The  trailing
-       ``?`` is necessary if this reference is to be followed by a modi-
-       fier or followed by any text that is not to be  considered  part
-       of str.
+!?str[?]  *str* を含む最も直近のコマンドを参照します。末尾の ``?`` は、もしこの
+          参照の後ろに修飾子や任意のテキストが続く場合には、 *str* の一部と
+          判断されないようにするために必要です。
 
-**!#**
-       Refer  to the current command line typed in so far.  The line is
-       treated as if it were complete up  to  and  including  the  word
-       before the one with the ``!#`` reference.
+!#        現在のコマンドライン上での、これまでの入力を参照します。入力行は
+          あたかも ``!#`` 参照と共にあったワードを含めて、補完されたかのように
+          扱われます。
 
-**!{...}**
-       Insulate a history reference from adjacent characters (if neces-
-       sary).
+!{...}    隣り合う文字から、ヒストリ参照を分離させます。
+========= =====================================================================
 
-Word Designators
-----------------
+ワード指示子
+------------
 
-A word designator indicates which word or words of a given command line
-are to be included in a history reference.  A ``:`` usually separates the
-event specification from the word designator.  It may be  omitted  only
-if  the  word designator begins with a ``^``, ``$``, ``*``, ``-`` or ``%``.  Word
-designators include:
+ワード指示子は指示された単語またはコマンドラインの単語がヒストリ参照に含まれる
+べきかを示します。 ``:`` は単語指示子からイベント指定を分離します。
+``^``, ``$``, ``*``, ``-`` または ``%`` で始まるワード指示子のみ、それを省略する
+ことができます。ワード指示子は以下を含みます :
 
 ====== ================================================================
-0      The first input word (command).
-n      The nth argument.
-^      The first argument.  That is, 1.
-$      The last argument.
-%      The word matched by (the most recent) ?str search.
-x-y    A range of words; x defaults to 0.
-\*     All the arguments, or a null value if there are none.
-x\*    Abbreviates ``x-$``.
-x-     Like ``x*`` but omitting word $.
+0      最初の入力ワード (コマンド) 。
+n      n 番目の引数。
+^      最初の引数。つまり 1 。
+$      最後の引数。
+%      ?str の検索にマッチした (最も新しい) ワード。
+x-y    ワードの範囲; x のデフォルトは 0 。
+\*     すべての引数、もしくは値がなれけば null 。
+x\*    ``x-$`` の省略形。
+x-     ``x*`` と似ているが ``$`` を省略。
 ====== ================================================================
 
 Note that a `%' word designator works only when used in  one  of ``!%``,
 ``!:%`` or ``!?str?:%``, and only when used after a !? expansion (possibly
 in an earlier command).  Anything else results in  an  error,  although
 the error may not be the most obvious one.
+
+'%' ワード指示子は ``!%``, ``!:%``, ``!?str?:%`` および (場合によっては
+過去のコマンドの) ``!?`` 展開 の後の、いずれかで使われる場合にのみ機能すること
+に注意してください。
+
 
 Modifiers
 ---------
